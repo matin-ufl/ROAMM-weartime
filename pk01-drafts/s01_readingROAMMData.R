@@ -40,7 +40,7 @@ read.ROAMMFile <- function(filename) {
      roamm.df$collectedTimeStamp <- as.character(roamm.df$collectedTimeStamp)
      roamm.df$heartRate <- as.character(roamm.df$heartRate); roamm.df$heartRate[roamm.df$heartRate == "None"] <- "NA"
      for(c in c(1, 3:ncol(roamm.df))) {
-          roamm.df[, c] <- as.numeric(roamm.df[, c])
+          roamm.df[, c] <- as.numeric(as.character(roamm.df[, c]))
      }
      roamm.df$dateTime <- sapply(roamm.df$collectedTimeStamp, readDateTime.ROAMMFile)
      roamm.df <- roamm.df[, c(1, 12, 2:11)]
@@ -71,7 +71,7 @@ outputFileName <- "rawROAMM_110316.Rdata"
 weartime_dataset.df <- data.frame(matrix(nrow = 0, ncol = 12))
 
 roamm.df <- read.ROAMMFile(paste(rawDataFolder, dir(path = rawDataFolder, pattern = "^sensor_data_.*.csv$"), sep = ""))
-log.df <- read.logFile(paste(rawDataFolder, dir(path = rawDataFolder, pattern = "^log_.*.csv$"), sep = ""))
+log.df <- read.logFile(paste(rawDataFolder, dir(path = rawDataFolder, pattern = "^.*log.*.csv$"), sep = ""))
 
 for(i in 1:nrow(log.df)) {
      start.idx <- which(roamm.df$dateTime == log.df$Start.time[i])
